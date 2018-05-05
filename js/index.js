@@ -134,7 +134,7 @@ function submitInfo(event){
     success: function(data){
       if (data != "") { 
           console.log(data)
-          
+          CargueResultados(data)
       }else {
         alert("No hay resultados para la consulta");
       }

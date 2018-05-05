@@ -6,9 +6,10 @@ require_once '../clases/buscador.class.php';
  */
 $data = file_get_contents("../data-1.json");
 $DB = json_decode($data, true);
+$obBuscador=new Buscador();
 if(isset($_REQUEST["CargarCiudad"])){
     
-    $obBuscador=new Buscador();
+    
     $DatosCiudades=$obBuscador->RetorneValoresUnicos($DB,"Ciudad");
     $DatosTipo=$obBuscador->RetorneValoresUnicos($DB,"Tipo");
     $Respuesta['Ciudades']=$DatosCiudades;
@@ -18,9 +19,13 @@ if(isset($_REQUEST["CargarCiudad"])){
 
 if(isset($_REQUEST["rangoPrecio"])){
     
-    $DatosFormulario["rangoPrecio"]=$_REQUEST["rangoPrecio"];    
-    $DatosFormulario["selectCiudad"]=$_REQUEST["selectCiudad"];
-    $DatosFormulario["selectTipo"]=$_REQUEST["selectTipo"];
+    $RangoPrecio=$_REQUEST["rangoPrecio"];    
+    $Ciudad=$_REQUEST["selectCiudad"];
+    $Tipo=$_REQUEST["selectTipo"];
+    $Resultados=$obBuscador->BusqueEnDB($DB, $RangoPrecio,$Ciudad,$Tipo);
+    if($Resultados==''){
+        $Resultados["Error"]="No hay resultados en la busqueda";
+    }
     
-    echo json_encode($DatosFormulario);
+    echo json_encode($Resultados);
 }
